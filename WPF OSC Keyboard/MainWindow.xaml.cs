@@ -23,10 +23,14 @@ namespace WPF_OSC_Keyboard
     /// </summary>
     public partial class MainWindow : Window
     {
+        // shit way to get inputbox text from main thread without dispacher
         public static string Inputtextbox = "";
+        // only allows the message sender to send if its true
         public static bool TextPopulated;
+        // define main window form
         private static MainWindow form;
-        private int _textpos = 0;
+        // text position for message box
+        private int _textpos;
         public MainWindow()
         {
             form = this;
@@ -38,7 +42,7 @@ namespace WPF_OSC_Keyboard
             OSCData.start();
 
         }
-
+        // forces UI to Top after deselecting chatbox
         private void Window_PreviewLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
             var window = (Window)sender;
@@ -50,18 +54,19 @@ namespace WPF_OSC_Keyboard
             Inputtextbox = form.InputText.Text;
         }
 
-
+        // clear text after its reached a certian length
         private void TextChanged(object sender, RoutedEventArgs e)
         {
             if (ChatBox.Text.Length > 500)
             {
+                // this doesnt work and will overload the UI Thread not sure how to fix - dont wanna clear all text only the first 450
                 var remove = ChatBox.Text.Remove(0, 450);
                 //ChatBox.Clear();
             }
             ChatBox.ScrollToEnd();
             InputText.Clear();
         }
-
+        
         private void KeydownAction(object sender, KeyEventArgs keyargs)
         {
             switch (keyargs.Key)
@@ -70,7 +75,7 @@ namespace WPF_OSC_Keyboard
                     TextPopulated = true;
                     ChatBoxProvider(InputText.Text);
                     break;
-                // only triggers when textbox is focused
+                // only triggers when inputtextbox is focused
                 case Key.F12:
                     ConsoleManager.ConsoleInitalize();
                     break;
@@ -141,16 +146,17 @@ namespace WPF_OSC_Keyboard
             _sender = new OscSender(IPAddress.Parse("127.0.0.1"), 0, 9000);
             _receiver = new OscReceiver(9001);
 
+            // Connect the Sender
             _sender.Connect();
             
+            // Connect the receiver
+            _receiver.Connect();
 
             // Create a thread to do the listening
             var threadlisten = new Thread(ListenLoop);
 
             var chatthread = new Thread(ChatLoop);
-
-            // Connect the receiver
-            _receiver.Connect();
+            
             
             // start threads
             threadlisten.Start();
@@ -215,8 +221,8 @@ namespace WPF_OSC_Keyboard
                             
                             Console.WriteLine(packet.ToString());
                             InvokeMessageOnMainThread(packet.ToString());
-                            
-                            if (!_pathBlacklist.Contains(message.Address)) InvokeMessageOnMainThread(packet.ToString());
+                            // disabled for now do not remove
+                            // if (!_pathBlacklist.Contains(message.Address)) InvokeMessageOnMainThread(packet.ToString());
                         }
                     }
                 }
