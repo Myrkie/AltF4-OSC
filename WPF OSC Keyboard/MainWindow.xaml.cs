@@ -86,6 +86,10 @@ namespace WPF_OSC_Keyboard
         {
             TextPopulated = true;
             ChatBoxProvider(InputText.Text); 
+        }        
+        private void ConsoleButton_Click(object sender, RoutedEventArgs e)
+        {
+            ConsoleManager.ConsoleInitalize();
         }
 
         private void ChatBoxProvider(string message)
