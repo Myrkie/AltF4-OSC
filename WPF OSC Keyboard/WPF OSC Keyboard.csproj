@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net6.0-windows</TargetFramework>
+        <RootNamespace>WPF_OSC_Keyboard</RootNamespace>
+        <Nullable>enable</Nullable>
+        <UseWPF>true</UseWPF>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Folder Include="Themes" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="Rug.Osc">
+        <HintPath>./WPF OSC Keyboard/Dependencies/Rug.Osc.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+</Project>
