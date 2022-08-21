@@ -60,8 +60,8 @@ namespace WPF_OSC_Keyboard
             if (ChatBox.Text.Length > 500)
             {
                 // this doesnt work and will overload the UI Thread not sure how to fix - dont wanna clear all text only the first 450
-                var remove = ChatBox.Text.Remove(0, 450);
-                //ChatBox.Clear();
+                // var remove = ChatBox.Text.Remove(0, 450);
+                ChatBox.Clear();
             }
             ChatBox.ScrollToEnd();
             InputText.Clear();
