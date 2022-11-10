@@ -129,7 +129,8 @@ namespace WPF_OSC_Keyboard
             "/avatar/parameters/Seated",
             "/avatar/parameters/MuteSelf",
             "/avatar/parameters/InStation",
-            "/avatar/parameters/TrackingType"
+            "/avatar/parameters/TrackingType",
+            "/avatar/parameters/VRMode"
         };
 
         static OscReceiver _receiver;
@@ -224,9 +225,9 @@ namespace WPF_OSC_Keyboard
                             var message = (OscMessage) packet;
                             
                             Console.WriteLine(packet.ToString());
-                            InvokeMessageOnMainThread(packet.ToString());
+                            //InvokeMessageOnMainThread(packet.ToString());
                             // disabled for now do not remove
-                            // if (!_pathBlacklist.Contains(message.Address)) InvokeMessageOnMainThread(packet.ToString());
+                            if (!_pathBlacklist.Contains(message.Address)) InvokeMessageOnMainThread(packet.ToString());
                         }
                     }
                 }
