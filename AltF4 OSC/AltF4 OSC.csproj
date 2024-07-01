@@ -3,7 +3,7 @@
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
         <TargetFramework>net6.0-windows</TargetFramework>
-        <RootNamespace>WPF_OSC_Keyboard</RootNamespace>
+        <RootNamespace>AltF4_OSC</RootNamespace>
         <Nullable>enable</Nullable>
         <UseWPF>true</UseWPF>
     </PropertyGroup>
@@ -13,9 +13,11 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Reference Include="Rug.Osc">
-        <HintPath>./WPF OSC Keyboard/Dependencies/Rug.Osc.dll</HintPath>
-      </Reference>
+      <ProjectReference Include="..\VRChatOSCLib\VRChatOSCLib.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="VRChat.OSCQuery" Version="0.0.7" />
     </ItemGroup>
 
 </Project>
