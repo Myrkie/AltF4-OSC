@@ -25,7 +25,7 @@ namespace WPF_OSC_Keyboard
         {
             _instance = this;
             InitializeComponent();
-            OSCData.start();
+            OSCData.Start();
         }
         
         

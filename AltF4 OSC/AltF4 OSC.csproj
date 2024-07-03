@@ -2,10 +2,11 @@
 
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
-        <TargetFramework>net6.0-windows</TargetFramework>
+        <TargetFramework>net7.0-windows</TargetFramework>
         <RootNamespace>AltF4_OSC</RootNamespace>
         <Nullable>enable</Nullable>
         <UseWPF>true</UseWPF>
+        <ApplicationIcon>altf4.ico</ApplicationIcon>
     </PropertyGroup>
 
     <ItemGroup>
@@ -13,11 +14,12 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\OscQueryLibrary\OscQueryLibrary.csproj" />
       <ProjectReference Include="..\VRChatOSCLib\VRChatOSCLib.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="VRChat.OSCQuery" Version="0.0.7" />
+      <Resource Include="altf4.ico" />
     </ItemGroup>
 
 </Project>
