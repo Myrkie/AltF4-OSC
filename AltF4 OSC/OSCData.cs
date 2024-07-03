@@ -32,7 +32,6 @@ public static class OSCData
             "127.0.0.1"
         );
         
-        osc.OnConnectionStateChanged += OnConnectionStateChanged;
         osc.Connect(OscQueryServer.OscSendPort);
         osc.Listen(OscQueryServer.OscReceivePort);
         osc.OnMessage += OnMessageReceived;
@@ -68,7 +67,6 @@ public static class OSCData
             if (booleanValue)
             {
                 InvokeMessageOnMainThread($"{message.AvatarParameter} Changed state to | {booleanValue}");
-                message.Print();
                     
                 if (MainWindow.Instance.IsCheckBoxChecked)
                 { 
@@ -78,35 +76,12 @@ public static class OSCData
             }
             else
             {
-                InvokeMessageOnMainThread($"{message.AvatarParameter} | State: false");
+                InvokeMessageOnMainThread($"{message.AvatarParameter} Changed state to | {booleanValue}");
             }
         }
     }
 
-
-    private static void OnConnectionStateChanged(object? sender, ConnectionState state)
-    {
-        Console.WriteLine($"Connection state changed to: {state}");
-
-        switch (state)
-        {
-            case ConnectionState.NotConnected:
-                InvokeMessageOnMainThread("Connection state changed to: NotConnected");
-                break;
-            case ConnectionState.Connecting:
-                InvokeMessageOnMainThread("Connection state changed to: Connecting");
-                break;
-            case ConnectionState.Connected:
-                InvokeMessageOnMainThread("Connection state changed to: Connected");
-                break;
-            case ConnectionState.Closing:
-                InvokeMessageOnMainThread("Connection state changed to: Closing");
-                break;
-            case ConnectionState.Closed:
-                InvokeMessageOnMainThread("Connection state changed to: Closed");
-                break;
-        }
-    }
+    
     private static void YeetVrc(string processName)
     {
         int delayMilliseconds = 800;

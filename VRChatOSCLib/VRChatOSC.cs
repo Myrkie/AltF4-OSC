@@ -4,14 +4,6 @@ using System.Net.Sockets;
 
 namespace VRChatOSCLib
 {
-    public enum ConnectionState
-    {
-        NotConnected,
-        Connecting,
-        Connected,
-        Closing,
-        Closed
-    }
     /// <summary>
     /// Main VRChat OSC class.
     /// </summary>
@@ -43,22 +35,6 @@ namespace VRChatOSCLib
         /// <summary>EventsHandler invoked on receiving VRChat OSC messages such as avatar parameters.</summary>
         public EventHandler<VRCMessage>? OnMessage;
         
-        /// <summary>EventHandler invoked when the connection state changes.</summary>
-        public EventHandler<ConnectionState>? OnConnectionStateChanged;
-        
-        private ConnectionState _connectionState = ConnectionState.NotConnected;
-        public ConnectionState ConnectionState
-        {
-            get => _connectionState;
-            private set
-            {
-                if (_connectionState != value)
-                {
-                    _connectionState = value;
-                    OnConnectionStateChanged?.Invoke(this, _connectionState);
-                }
-            }
-        }
         
         #region Constructor
         /// <summary>
@@ -99,8 +75,6 @@ namespace VRChatOSCLib
         {
             if (m_Started) return;
             
-            ConnectionState = ConnectionState.Connecting;
-
             m_Client = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
             if (ipAddress.Equals(IPAddress.Broadcast))
                 m_Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.Broadcast, true);
@@ -109,8 +83,6 @@ namespace VRChatOSCLib
             m_Client.Connect(RemoteEndPoint);
 
             m_Started = true;
-            ConnectionState = ConnectionState.Connected;
-            
         }
 
         /// <summary>Listen for incoming messages from the VRChat client.</summary>
@@ -263,16 +235,12 @@ namespace VRChatOSCLib
         public void Dispose()
         {
             if (m_Disposed) return;
-            ConnectionState = ConnectionState.Closing;
-            
             m_Client?.Close();
             m_Server?.Close();
             m_Client?.Dispose();
             m_Server?.Dispose();
             m_Disposed = true;
             m_Started = false;
-            
-            ConnectionState = ConnectionState.Closed;
         }
     }
 }
