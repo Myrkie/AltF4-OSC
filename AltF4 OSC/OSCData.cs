@@ -6,17 +6,17 @@ using System.Windows;
 using OscQueryLibrary;
 using VRChatOSCLib;
 
-namespace WPF_OSC_Keyboard;
+namespace AltF4_OSC;
 
-public static class OSCData
+public static class OscData
 {
-    static VRChatOSC osc = new();
+    private static readonly VRChatOSC Osc = new();
 
-    private static OscQueryServer _oscQueryServer;
+    private static readonly OscQueryServer OscQueryServer = new(GenerateRandomPrefixedString(), "127.0.0.1");
     internal static void Dispose()
     {
-        osc.Dispose();
-        _oscQueryServer.Dispose();
+        Osc.Dispose();
+        OscQueryServer.Dispose();
     }
 
     static void InvokeMessageOnMainThread(string message)
@@ -27,18 +27,13 @@ public static class OSCData
 
     internal static void Start()
     {
-        _oscQueryServer = new OscQueryServer(
-            GenerateRandomPrefixedString(),
-            "127.0.0.1"
-        );
-        
-        osc.Connect(OscQueryServer.OscSendPort);
-        osc.Listen(OscQueryServer.OscReceivePort);
-        osc.OnMessage += OnMessageReceived;
+        Osc.Connect(OscQueryServer.OscSendPort);
+        Osc.Listen(OscQueryServer.OscReceivePort);
+        Osc.OnMessage += OnMessageReceived;
     }
-    
-    
-    public static string GenerateRandomPrefixedString()
+
+
+    private static string GenerateRandomPrefixedString()
     {
         Random random = new Random();
         StringBuilder stringBuilder = new StringBuilder("AltF4-OSC-");
@@ -70,8 +65,8 @@ public static class OSCData
                     
                 if (MainWindow.Instance.IsCheckBoxChecked)
                 { 
-                    InvokeMessageOnMainThread("Conditions met, closing vrchat");
-                    YeetVrc("vrchat");
+                    InvokeMessageOnMainThread("Conditions met, closing VRChat.");
+                    YeetVrc("VRChat");
                 }
             }
             else

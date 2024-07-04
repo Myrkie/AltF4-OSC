@@ -2,7 +2,7 @@
 using System.IO;
 using System.Runtime.InteropServices;
 
-namespace WPF_OSC_Keyboard
+namespace AltF4_OSC
 {
     public static class ConsoleManager
     {
@@ -22,7 +22,7 @@ namespace WPF_OSC_Keyboard
             SetForegroundWindow(GetConsoleWindow());
         }
 
-        public static void ConsoleInitalize()
+        public static void InitializeConsole()
         {
             AllocConsole();
             Console.SetOut(new StreamWriter(Console.OpenStandardOutput())

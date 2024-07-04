@@ -1,31 +1,24 @@
 ﻿using System;
 using System.Windows;
 
-namespace WPF_OSC_Keyboard
+namespace AltF4_OSC
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow
     {
-        private static MainWindow _instance;
+        private static MainWindow? _instance;
 
         public static MainWindow Instance
         {
-            get
-            {
-                if (_instance == null)
-                {
-                    _instance = new MainWindow();
-                }
-                return _instance;
-            }
+            get { return _instance ??= new MainWindow(); }
         }
         public MainWindow()
         {
             _instance = this;
             InitializeComponent();
-            OSCData.Start();
+            OscData.Start();
         }
         
         
@@ -33,7 +26,7 @@ namespace WPF_OSC_Keyboard
         {
             get
             {
-                bool isChecked = false;
+                var isChecked = false;
                 Dispatcher.Invoke(() =>
                 {
                     isChecked = EnableCheckBox.IsChecked ?? false;
@@ -44,13 +37,13 @@ namespace WPF_OSC_Keyboard
 
         protected override void OnClosed(EventArgs e)
         {
-            OSCData.Dispose();
+            OscData.Dispose();
             Application.Current.Shutdown();
         }
 
         private void ConsoleButton_Click(object sender, RoutedEventArgs e)
         {
-            ConsoleManager.ConsoleInitalize();
+            ConsoleManager.InitializeConsole();
         }
 
         private void ClearBox(object sender, RoutedEventArgs e)
@@ -58,7 +51,7 @@ namespace WPF_OSC_Keyboard
             NotificationBox.Clear();
         }
 
-        private void NotifBoxProvider(string message)
+        private void NotificationBoxProvider(string message)
         {
             NotificationBox.AppendText($"{message}\n");
             if (AutoScroll.IsChecked == true)
@@ -69,7 +62,7 @@ namespace WPF_OSC_Keyboard
         
         internal static void Message(string message)
         {
-            _instance.NotifBoxProvider(message);
+            _instance?.NotificationBoxProvider(message);
         }
     }
 }

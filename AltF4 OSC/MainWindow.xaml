@@ -1,4 +1,4 @@
-﻿<Window x:Class="WPF_OSC_Keyboard.MainWindow"
+﻿<Window x:Class="AltF4_OSC.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="AltF4 OSC" Height="500" Width="500" MinHeight="200" MinWidth="300" ResizeMode="CanResize" Style="{DynamicResource CustomWindowStyle}" Icon="altf4.ico">

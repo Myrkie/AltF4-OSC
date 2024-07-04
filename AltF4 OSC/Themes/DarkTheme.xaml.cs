@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace REghZyFramework.Themes
+namespace AltF4_OSC.Themes
 {
     public partial class DarkTheme
     {
