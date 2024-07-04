@@ -2,7 +2,7 @@
 
 namespace REghZyFramework.Themes
 {
-    public partial class DarkTheme
+    public partial class ColourfulDarkTheme
     {
         private void CloseWindow_Event(object sender, RoutedEventArgs e)
         {
