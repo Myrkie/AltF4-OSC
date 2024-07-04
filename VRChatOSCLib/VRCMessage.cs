@@ -73,7 +73,10 @@
                 int parameterStartIndex = avatar_parameters_address.Length;
                 AvatarParameter = Address.Substring(parameterStartIndex + 1);
             }
-            else if (Address.StartsWith(avatar_change_address)) Type = MessageType.AvatarChange;
+            else if (Address.StartsWith(avatar_change_address))
+            {
+                Type = MessageType.AvatarChange;
+            }
             else Type = MessageType.Unknown;
         }
 

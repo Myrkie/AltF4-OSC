@@ -50,29 +50,40 @@ public static class OscData
         return stringBuilder.ToString();
     }
     
-    static void OnMessageReceived(object? source, VRCMessage message)
+    private static void OnMessageReceived(object? source, VRCMessage message)
     {
         VRCMessage.MessageType messageType = message.Type;
 
-        if (messageType != VRCMessage.MessageType.AvatarParameter ||
-            message.AvatarParameter != "Misc/Disconnect") return;
-        object? value = message.GetValue();
-        if (value is bool booleanValue)
+        switch (messageType)
         {
-            if (booleanValue)
-            {
-                InvokeMessageOnMainThread($"{message.AvatarParameter} Changed state to | {booleanValue}");
+            case VRCMessage.MessageType.AvatarParameter:
+                switch (message.AvatarParameter)
+                {
+                    case "Misc/Disconnect":
+                        if (message.GetValue() is bool disconnectBoolean)
+                        {
+                            if (disconnectBoolean)
+                            {
+                                InvokeMessageOnMainThread($"{message.AvatarParameter} Changed state to | {disconnectBoolean}");
                     
-                if (MainWindow.Instance.IsCheckBoxChecked)
-                { 
-                    InvokeMessageOnMainThread("Conditions met, closing VRChat.");
-                    YeetVrc("VRChat");
+                                if (MainWindow.Instance.IsCheckBoxChecked)
+                                { 
+                                    InvokeMessageOnMainThread("Conditions met, closing VRChat.");
+                                    YeetVrc("VRChat");
+                                }
+                            }
+                            else
+                            {
+                                InvokeMessageOnMainThread($"{message.AvatarParameter} Changed state to | {disconnectBoolean}");
+                            }
+                        }
+                        break;
                 }
-            }
-            else
-            {
-                InvokeMessageOnMainThread($"{message.AvatarParameter} Changed state to | {booleanValue}");
-            }
+                break;
+            
+            case VRCMessage.MessageType.AvatarChange:
+                if (message.GetValue() is string s) InvokeMessageOnMainThread($"Avatar Changed to {s}");
+                break;
         }
     }
 
