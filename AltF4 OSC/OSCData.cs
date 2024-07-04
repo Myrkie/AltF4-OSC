@@ -19,7 +19,7 @@ public static class OscData
         OscQueryServer.Dispose();
     }
 
-    static void InvokeMessageOnMainThread(string message)
+    private static void InvokeMessageOnMainThread(string message)
     {
         Application.Current.Dispatcher.Invoke(() => { MainWindow.Message(message); });
     }
