@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using System.Threading;
@@ -61,6 +60,10 @@ public static class OscData
                                 InvokeMessageOnMainThread($"{message.AvatarParameter} Changed state to | {disconnectBoolean}");
                             }
                         }
+                        break;
+                    
+                    default: 
+                        message.Print(); 
                         break;
                 }
                 break;
