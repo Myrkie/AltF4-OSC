@@ -7,9 +7,9 @@ namespace VRChatOSCLib
     /// <summary>
     /// Main VRChat OSC class.
     /// </summary>
+    /// createdb by https://github.com/ChrisFeline/VRChatOSCLib
     public partial class VRChatOSC : IDisposable
     {
-        
         private const string chatbox_input_address = "/chatbox/input";
         private const string chatbox_typing_address = "/chatbox/typing";
         private const string avatar_parameters_address = "/avatar/parameters";
@@ -34,7 +34,18 @@ namespace VRChatOSCLib
 
         /// <summary>EventsHandler invoked on receiving VRChat OSC messages such as avatar parameters.</summary>
         public EventHandler<VRCMessage>? OnMessage;
+        private readonly Dictionary<string, Action<VRCMessage>> _callbacks = new Dictionary<string, Action<VRCMessage>>();
         
+        /// <summary>
+        /// Adds a method to be invoked when a message from a specific OSC address is received.
+        /// </summary>
+        /// <param name="address">The OSC address to listen for.</param>
+        /// <param name="callback">The method to invoke when the address is received.</param>
+        /// <returns>True if the method was added, false if the address already has a callback.</returns>
+        public bool TryAddMethod(string address, Action<VRCMessage> callback)
+        {
+            return _callbacks.TryAdd(address, callback);
+        }
         
         #region Constructor
         /// <summary>
@@ -88,14 +99,13 @@ namespace VRChatOSCLib
         /// <summary>Listen for incoming messages from the VRChat client.</summary>
         /// <param name="localPort">The local port for receiving data on your network.</param>
         /// <param name="bufferLength">UDP buffer length, default is 4096</param>
-        public void Listen(int localPort = 9001, int bufferLength = 4096)
+        public void Listen(IPAddress localIpAddress, int localPort = 9001, int bufferLength = 4096)
         {
             if (m_Listening) return;
 
-            LocalEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), localPort);
+            LocalEndPoint = new IPEndPoint(localIpAddress, localPort);
 
             m_Server = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp) { ReceiveTimeout = int.MaxValue };
-            // Allow other processes to reuse this ip-address/port pair.
             m_Server.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
             m_Server.Bind(LocalEndPoint);
 
@@ -106,6 +116,7 @@ namespace VRChatOSCLib
 
             m_Listening = true;
         }
+
         #endregion
 
 
@@ -213,13 +224,18 @@ namespace VRChatOSCLib
                     int receivedByteCount = m_Server.Receive(buffer, 0, buffer.Length, SocketFlags.None);
                     if (receivedByteCount == 0) continue;
 
-                    if (OnMessage != null)
+                    OscMessage parsed = OscMessage.Read(buffer, 0, receivedByteCount);
+                    VRCMessage message = new VRCMessage(parsed);
+
+                    if (LogMessages) 
+                        message.Print();
+
+                    if (_callbacks.TryGetValue(message.AvatarParameter, out var callback))
                     {
-                        OscMessage parsed = OscMessage.Read(buffer, 0, receivedByteCount);
-                        VRCMessage message = new VRCMessage(parsed);
-                        if (LogMessages) message.Print();
-                        OnMessage.Invoke(this, message);
+                        callback.Invoke(message);
                     }
+                    
+                    OnMessage?.Invoke(this, message);
                 }
                 catch (SocketException) { }
                 catch (ThreadAbortException) { }

@@ -4,8 +4,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AltF4 OSC", "AltF4 OSC\AltF
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VRChatOSCLib", "VRChatOSCLib\VRChatOSCLib.csproj", "{97D0EE17-61E9-4DBD-916C-79932A422B8B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OscQueryLibrary", "OscQueryLibrary\OscQueryLibrary.csproj", "{EC598CF7-84C2-4445-B057-EC576BA736C1}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,9 +18,5 @@ Global
 		{97D0EE17-61E9-4DBD-916C-79932A422B8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{97D0EE17-61E9-4DBD-916C-79932A422B8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{97D0EE17-61E9-4DBD-916C-79932A422B8B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EC598CF7-84C2-4445-B057-EC576BA736C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EC598CF7-84C2-4445-B057-EC576BA736C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EC598CF7-84C2-4445-B057-EC576BA736C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EC598CF7-84C2-4445-B057-EC576BA736C1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

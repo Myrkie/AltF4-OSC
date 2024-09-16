@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Windows;
+using Serilog;
 
 namespace AltF4_OSC
 {
@@ -8,6 +10,8 @@ namespace AltF4_OSC
     /// </summary>
     public partial class MainWindow
     {
+        private static readonly ILogger Logger = Log.ForContext(typeof(MainWindow));
+
         private static MainWindow? _instance;
 
         public static MainWindow Instance
@@ -16,10 +20,28 @@ namespace AltF4_OSC
         }
         public MainWindow()
         {
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .WriteTo.Console(
+                    outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] [{SourceContext}] {Message:lj}{NewLine}{Exception}",
+                    theme: Serilog.Sinks.SystemConsole.Themes.AnsiConsoleTheme.Code)
+                .CreateLogger();
             _instance = this;
             InitializeComponent();
-            OscData.Start();
+            
+            Task.Run(async () =>
+            {
+                try
+                {
+                    await OscData.Start();
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex, "Error starting OscData.");
+                }
+            });
         }
+        
         
         
         public bool IsCheckBoxChecked
