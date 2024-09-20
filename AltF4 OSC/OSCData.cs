@@ -35,6 +35,7 @@ public static class OscData
         else
         {
             Logger.Debug("Debug mode has been activated, your ports will be defined by config.");
+            Utils.InvokeMessageOnMainThread("Debug mode has been activated, your ports will be defined by config.");
             await PortOverride();
         }
     }
@@ -61,6 +62,7 @@ public static class OscData
         Utils.InvokeMessageOnMainThread($"Listening on {ipEndPoint.Address}|{oscQueryServer.OscReceivePort} ");
         Logger.Information("Listening on {ip}|{port} ", ipEndPoint.Address, oscQueryServer.OscReceivePort);
         _oscInstance.TryAddMethod(Config.Instance.Parameter, DisconnectReceived);
+        _oscInstance.TryAddMethod("Misc/Ping", RecievedPing);
         
         _currentOscQueryServer = oscQueryServer;
     }
@@ -82,28 +84,40 @@ public static class OscData
         Logger.Information("Listening on {ip}|{port} ", Config.Instance.Network.Ip, Config.Instance.Network.ListeningPort);
         
         _oscInstance.TryAddMethod(Config.Instance.Parameter, DisconnectReceived);
+        _oscInstance.TryAddMethod("Misc/Ping", RecievedPing);
     }
     
     
     private static void DisconnectReceived(VRCMessage msg)
     {
-        Console.WriteLine(msg.GetValue());
         if (msg.GetValue() is bool disconnectBoolean)
         {
             if (disconnectBoolean)
             {
                 Utils.InvokeMessageOnMainThread($"{msg.AvatarParameter} Changed state to | {disconnectBoolean}");
-                    
-                if (MainWindow.Instance.IsCheckBoxChecked)
-                { 
-                    Utils.InvokeMessageOnMainThread("Conditions met, closing VRChat.");
-                    YeetVrc("VRChat");
-                }
+
+                if (!MainWindow.Instance.IsCheckBoxChecked) return;
+                Utils.InvokeMessageOnMainThread("Conditions met, closing VRChat.");
+                YeetVrc("VRChat");
             }
             else
             {
                 Utils.InvokeMessageOnMainThread($"{msg.AvatarParameter} Changed state to | {disconnectBoolean}");
             }
+        }
+    }
+    
+    private static void RecievedPing(VRCMessage msg)
+    {
+        if (msg.GetValue() is not bool Ping) return;
+        if (Ping)
+        {
+            Utils.InvokeMessageOnMainThread($"{msg.AvatarParameter} Changed state to | {Ping}");
+                
+        }
+        else
+        {
+            Utils.InvokeMessageOnMainThread($"{msg.AvatarParameter} Changed state to | {Ping}");
         }
     }
     private static string GenerateRandomPrefixedString()
