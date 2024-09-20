@@ -30,6 +30,8 @@ namespace AltF4_OSC.Misc
 
         public string Parameter { get; set; } = "Misc/Disconnect";
 
+        public bool AutoScroll { get; set; } = true;
+
         static Config LoadConfig()
         {
             Config? cfg = File.Exists(ConfigPath) ? JsonSerializer.Deserialize(File.ReadAllText(ConfigPath), ConfigSourceGenerationContext.Default.Config) : null;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Windows;
+using AltF4_OSC.Misc;
 using Serilog;
 
 namespace AltF4_OSC
@@ -28,6 +29,8 @@ namespace AltF4_OSC
                 .CreateLogger();
             _instance = this;
             InitializeComponent();
+
+            AutoScroll.IsChecked = Config.Instance.AutoScroll;
             
             Task.Run(async () =>
             {
@@ -37,7 +40,7 @@ namespace AltF4_OSC
                 }
                 catch (Exception ex)
                 {
-                    Log.Error(ex, "Error starting OscData.");
+                    Logger.Error(ex, "Error starting OscData.");
                 }
             });
         }

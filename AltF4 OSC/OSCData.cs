@@ -4,9 +4,7 @@ using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
 using AltF4_OSC.Misc;
-using Microsoft.VisualBasic.CompilerServices;
 using OscQueryLibrary;
 using Serilog;
 using VRChatOSCLib;
@@ -31,8 +29,8 @@ public static class OscData
             oscQueryServer.FoundVrcClient += FoundVrcClient;
             oscQueryServer.Start();
             Logger.Information($"{AppDomain.CurrentDomain.FriendlyName}: Starting up, building connections.");
-            Misc.Utils.InvokeMessageOnMainThread($"{AppDomain.CurrentDomain.FriendlyName}: Starting up, building connections.");
-            Misc.Utils.WaitForListening(ref _oscInstance);
+            Utils.InvokeMessageOnMainThread($"{AppDomain.CurrentDomain.FriendlyName}: Starting up, building connections.");
+            Utils.WaitForListening(ref _oscInstance);
         }
         else
         {
@@ -60,7 +58,7 @@ public static class OscData
         _oscInstance = new VRChatOSC();
 
         _oscInstance.Listen(ipEndPoint!.Address, oscQueryServer!.OscReceivePort);
-        Misc.Utils.InvokeMessageOnMainThread($"Listening on {ipEndPoint.Address}|{oscQueryServer.OscReceivePort} ");
+        Utils.InvokeMessageOnMainThread($"Listening on {ipEndPoint.Address}|{oscQueryServer.OscReceivePort} ");
         Logger.Information("Listening on {ip}|{port} ", ipEndPoint.Address, oscQueryServer.OscReceivePort);
         _oscInstance.TryAddMethod(Config.Instance.Parameter, DisconnectReceived);
         
@@ -80,7 +78,7 @@ public static class OscData
         _oscInstance.Listen(IPAddress.Parse(Config.Instance.Network.Ip), Config.Instance.Network.ListeningPort);
         _oscInstance.Connect(IPAddress.Parse(Config.Instance.Network.Ip), Config.Instance.Network.SendingPort);
         
-        Misc.Utils.InvokeMessageOnMainThread($"Listening on {Config.Instance.Network.Ip}|{Config.Instance.Network.ListeningPort} ");
+        Utils.InvokeMessageOnMainThread($"Listening on {Config.Instance.Network.Ip}|{Config.Instance.Network.ListeningPort} ");
         Logger.Information("Listening on {ip}|{port} ", Config.Instance.Network.Ip, Config.Instance.Network.ListeningPort);
         
         _oscInstance.TryAddMethod(Config.Instance.Parameter, DisconnectReceived);
@@ -94,17 +92,17 @@ public static class OscData
         {
             if (disconnectBoolean)
             {
-                Misc.Utils.InvokeMessageOnMainThread($"{msg.AvatarParameter} Changed state to | {disconnectBoolean}");
+                Utils.InvokeMessageOnMainThread($"{msg.AvatarParameter} Changed state to | {disconnectBoolean}");
                     
                 if (MainWindow.Instance.IsCheckBoxChecked)
                 { 
-                    Misc.Utils.InvokeMessageOnMainThread("Conditions met, closing VRChat.");
+                    Utils.InvokeMessageOnMainThread("Conditions met, closing VRChat.");
                     YeetVrc("VRChat");
                 }
             }
             else
             {
-                Misc.Utils.InvokeMessageOnMainThread($"{msg.AvatarParameter} Changed state to | {disconnectBoolean}");
+                Utils.InvokeMessageOnMainThread($"{msg.AvatarParameter} Changed state to | {disconnectBoolean}");
             }
         }
     }
@@ -135,17 +133,17 @@ public static class OscData
         if (processes.Length == 1)
         {
             Process process = processes[0];
-            Misc.Utils.InvokeMessageOnMainThread($"Found process: {process.ProcessName}, PID: {process.Id}");
+            Utils.InvokeMessageOnMainThread($"Found process: {process.ProcessName}, PID: {process.Id}");
             Thread.Sleep(delayMilliseconds);
 
             try
             {
                 process.CloseMainWindow();
-                Misc.Utils.InvokeMessageOnMainThread($"Process {process.ProcessName} terminated.");
+                Utils.InvokeMessageOnMainThread($"Process {process.ProcessName} terminated.");
             }
             catch (Exception ex)
             {
-                Misc.Utils.InvokeMessageOnMainThread($"Failed to terminate process {process.ProcessName}: {ex.Message}");
+                Utils.InvokeMessageOnMainThread($"Failed to terminate process {process.ProcessName}: {ex.Message}");
             }
         }
     }
