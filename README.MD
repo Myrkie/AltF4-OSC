@@ -1,12 +1,27 @@
-﻿This is a simple OSC Application that detects if a boolean by the name of `Misc/Disconnect` was set to true, 
-if so it will alt-f4 the VRChat process after a set timeout of 800 milliseconds
+﻿# OSC Alt-F4 Application for VRChat
 
-this can be used for simple gimmicks such as a "logoff off suicide" for the sake of comedy or flashiness
+This is a simple OSC application designed to monitor a specific boolean value. When the boolean is set to `true`, the application will automatically close the VRChat process after a delay of 800 milliseconds (via Alt+F4). 
 
+This can be used for fun or gimmicky effects, such as a "log off suicide" in VRChat.
 
-# Used resources
-[OSCQuery library](https://github.com/Natsumi-sama/OscQueryLibrary)
+You must have basic understanding of unity animators if you plan to use this.
 
-[VRChat Dedicated OSC Library](https://github.com/ChrisFeline/VRChatOSCLib)
+## Features
+- Detects when a boolean parameter is set to `true`.
+- Closes the VRChat process after a configured timeout `default 800ms`.
 
-[WPFDarkTheme](https://github.com/AngryCarrot789/WPFDarkTheme/)
+## Information
+1. **Avatar Parameters**: The application trims avatar parameters. Use just the name of the parameter. For example, `/avatar/parameters/VRCEmote` becomes `VRCEmote`. This supports categorized animator parameters names.
+
+2. **Timeout Logic**: Once the boolean is detected as `true`, VRChat will close after 800 milliseconds if "Enable Alt+F4" is checked. reset the boolean back to `false` in your animator after it has been set to `true` to avoid unintended behavior.
+
+3. **OSCQuery**: This application utilizes OSCQuery this can be overwritten in required in the config.
+
+## Resources Used
+- [OSCQuery library](https://github.com/Natsumi-sama/OscQueryLibrary)
+- [VRChat Dedicated OSC Library](https://github.com/Myrkie/VRChatOSCLib)
+- [WPFDarkTheme](https://github.com/AngryCarrot789/WPFDarkTheme)
+
+---
+
+This structure clearly separates each part, making the README easier to follow for users.

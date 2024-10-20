@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -27,8 +26,11 @@ namespace AltF4_OSC.Misc
         public static Config Instance { get; } = LoadConfig();
 
         public NetworkConfig Network { get; set; } = new();
-
+        
         public string Parameter { get; set; } = "Misc/Disconnect";
+        // this is used to send a ping to the application for connectivity testing, not required.
+        public string PingParameter { get; set; } = "Misc/Ping";
+        public int WaitTimeout { get; set; } = 800;
 
         public bool AutoScroll { get; set; } = true;
 

@@ -58,11 +58,14 @@ public static class OscData
 
         _oscInstance = new VRChatOSC();
 
-        _oscInstance.Listen(ipEndPoint!.Address, oscQueryServer!.OscReceivePort);
+        _oscInstance.Connect(ipEndPoint!.Address, ipEndPoint.Port);
+        _oscInstance.Listen(ipEndPoint.Address, oscQueryServer!.OscReceivePort);
+        
         Utils.InvokeMessageOnMainThread($"Listening on {ipEndPoint.Address}|{oscQueryServer.OscReceivePort} ");
         Logger.Information("Listening on {ip}|{port} ", ipEndPoint.Address, oscQueryServer.OscReceivePort);
+        
         _oscInstance.TryAddMethod(Config.Instance.Parameter, DisconnectReceived);
-        _oscInstance.TryAddMethod("Misc/Ping", RecievedPing);
+        _oscInstance.TryAddMethod("Misc/Ping", ReceivedPing);
         
         _currentOscQueryServer = oscQueryServer;
     }
@@ -77,47 +80,46 @@ public static class OscData
         _oscInstance = null;
         
         _oscInstance = new VRChatOSC();
-        _oscInstance.Listen(IPAddress.Parse(Config.Instance.Network.Ip), Config.Instance.Network.ListeningPort);
         _oscInstance.Connect(IPAddress.Parse(Config.Instance.Network.Ip), Config.Instance.Network.SendingPort);
+        _oscInstance.Listen(IPAddress.Parse(Config.Instance.Network.Ip), Config.Instance.Network.ListeningPort);
         
         Utils.InvokeMessageOnMainThread($"Listening on {Config.Instance.Network.Ip}|{Config.Instance.Network.ListeningPort} ");
         Logger.Information("Listening on {ip}|{port} ", Config.Instance.Network.Ip, Config.Instance.Network.ListeningPort);
         
         _oscInstance.TryAddMethod(Config.Instance.Parameter, DisconnectReceived);
-        _oscInstance.TryAddMethod("Misc/Ping", RecievedPing);
+        _oscInstance.TryAddMethod(Config.Instance.PingParameter, ReceivedPing);
     }
     
     
     private static void DisconnectReceived(VRCMessage msg)
     {
-        if (msg.GetValue() is bool disconnectBoolean)
+        if (msg.GetValue() is not bool disconnectBoolean) return;
+        if (disconnectBoolean)
         {
-            if (disconnectBoolean)
-            {
-                Utils.InvokeMessageOnMainThread($"{msg.AvatarParameter} Changed state to | {disconnectBoolean}");
+            Utils.InvokeMessageOnMainThread($"{msg.AvatarParameter} Changed state to | {disconnectBoolean}");
 
-                if (!MainWindow.Instance.IsCheckBoxChecked) return;
-                Utils.InvokeMessageOnMainThread("Conditions met, closing VRChat.");
-                YeetVrc("VRChat");
-            }
-            else
-            {
-                Utils.InvokeMessageOnMainThread($"{msg.AvatarParameter} Changed state to | {disconnectBoolean}");
-            }
+            if (!MainWindow.Instance.IsCheckBoxChecked) return;
+            Utils.InvokeMessageOnMainThread("Conditions met, closing VRChat.");
+            CloseProcess("VRChat");
+        }
+        else
+        {
+            Utils.InvokeMessageOnMainThread($"{msg.AvatarParameter} Changed state to | {disconnectBoolean}");
+            _oscInstance!.SendParameter(Config.Instance.Parameter, false);
         }
     }
     
-    private static void RecievedPing(VRCMessage msg)
+    private static void ReceivedPing(VRCMessage msg)
     {
-        if (msg.GetValue() is not bool Ping) return;
-        if (Ping)
+        if (msg.GetValue() is not bool ping) return;
+        if (ping)
         {
-            Utils.InvokeMessageOnMainThread($"{msg.AvatarParameter} Changed state to | {Ping}");
+            Utils.InvokeMessageOnMainThread($"{msg.AvatarParameter} Changed state to | {ping}");
                 
         }
         else
         {
-            Utils.InvokeMessageOnMainThread($"{msg.AvatarParameter} Changed state to | {Ping}");
+            Utils.InvokeMessageOnMainThread($"{msg.AvatarParameter} Changed state to | {ping}");
         }
     }
     private static string GenerateRandomPrefixedString()
@@ -138,27 +140,25 @@ public static class OscData
     }
 
     
-    private static void YeetVrc(string processName)
+    private static void CloseProcess(string processName)
     {
-        int delayMilliseconds = 800;
-
         var processes = Process.GetProcessesByName(processName);
 
-        if (processes.Length == 1)
-        {
-            Process process = processes[0];
-            Utils.InvokeMessageOnMainThread($"Found process: {process.ProcessName}, PID: {process.Id}");
-            Thread.Sleep(delayMilliseconds);
+        if (processes.Length != 1) return;
+        
+        // only close the first process.
+        var process = processes[0];
+        Utils.InvokeMessageOnMainThread($"Found process: {process.ProcessName}, PID: {process.Id}");
+        Thread.Sleep(Config.Instance.WaitTimeout);
 
-            try
-            {
-                process.CloseMainWindow();
-                Utils.InvokeMessageOnMainThread($"Process {process.ProcessName} terminated.");
-            }
-            catch (Exception ex)
-            {
-                Utils.InvokeMessageOnMainThread($"Failed to terminate process {process.ProcessName}: {ex.Message}");
-            }
+        try
+        {
+            process.CloseMainWindow();
+            Utils.InvokeMessageOnMainThread($"Process {process.ProcessName} terminated.");
+        }
+        catch (Exception ex)
+        {
+            Utils.InvokeMessageOnMainThread($"Failed to terminate process {process.ProcessName}: {ex.Message}");
         }
     }
 }
