@@ -45,8 +45,6 @@ namespace AltF4_OSC
             });
         }
         
-        
-        
         public bool IsCheckBoxChecked
         {
             get

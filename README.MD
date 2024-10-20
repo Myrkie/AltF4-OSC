@@ -21,7 +21,3 @@ You must have basic understanding of unity animators if you plan to use this.
 - [OSCQuery library](https://github.com/Natsumi-sama/OscQueryLibrary)
 - [VRChat Dedicated OSC Library](https://github.com/Myrkie/VRChatOSCLib)
 - [WPFDarkTheme](https://github.com/AngryCarrot789/WPFDarkTheme)
-
----
-
-This structure clearly separates each part, making the README easier to follow for users.

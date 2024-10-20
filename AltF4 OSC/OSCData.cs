@@ -23,7 +23,7 @@ public static class OscData
 
     internal static async Task Start()
     {    
-        var oscQueryServer = new OscQueryServer(GenerateRandomPrefixedString(), IPAddress.Parse(Config.Instance.Network.Ip));
+        var oscQueryServer = new OscQueryServer(GenerateRandomPrefixedString(AppDomain.CurrentDomain.FriendlyName), IPAddress.Parse(Config.Instance.Network.Ip));
         if (!Config.Instance.Network.UseConfigPorts)
         {
             oscQueryServer.FoundVrcClient += FoundVrcClient;
@@ -122,11 +122,12 @@ public static class OscData
             Utils.InvokeMessageOnMainThread($"{msg.AvatarParameter} Changed state to | {ping}");
         }
     }
-    private static string GenerateRandomPrefixedString()
+    private static string GenerateRandomPrefixedString(string appName)
     {
         Random random = new Random();
-        StringBuilder stringBuilder = new StringBuilder("AltF4-OSC-");
+        StringBuilder stringBuilder = new StringBuilder(appName);
 
+        stringBuilder.Append('-');
         for (int i = 0; i < 5; i++)
         {
             int randomNumber = random.Next(0, 10);
