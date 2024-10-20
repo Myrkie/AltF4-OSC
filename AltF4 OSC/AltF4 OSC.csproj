@@ -9,6 +9,7 @@
         <ApplicationIcon>altf4.ico</ApplicationIcon>
         <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
         <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+        <Version>1.0.0</Version>
     </PropertyGroup>
 
     <ItemGroup>

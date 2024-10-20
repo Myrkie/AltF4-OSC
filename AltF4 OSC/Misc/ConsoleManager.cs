@@ -9,10 +9,12 @@ namespace AltF4_OSC
     {
         [DllImport("kernel32.dll")]
         private static extern int AllocConsole();
+        
+        [DllImport("kernel32.dll")]
+        private static extern bool FreeConsole();
 
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
-        
         private static extern bool SetForegroundWindow(IntPtr hWnd);
 
         [DllImport("kernel32.dll")]
@@ -29,7 +31,7 @@ namespace AltF4_OSC
 
         private const int STD_OUTPUT_HANDLE = -11;
         private const uint ENABLE_VIRTUAL_TERMINAL_PROCESSING = 0x0004;
-
+        
         private static void ShowConsole()
         {
             SetForegroundWindow(GetConsoleWindow());
@@ -43,8 +45,10 @@ namespace AltF4_OSC
             SetConsoleMode(handle, mode);
         }
 
-        public static void InitializeConsole()
+        public static void ToggleConsole()
         {
+            FreeConsoleWindow();
+            
             AllocConsole();
             EnableAnsiSupport();
             Console.OutputEncoding = Encoding.UTF8;
@@ -56,6 +60,12 @@ namespace AltF4_OSC
             Console.SetIn(new StreamReader(Console.OpenStandardInput()));
             Console.Clear();
             ShowConsole();
+        }
+        
+        private static void FreeConsoleWindow()
+        {
+            if (GetConsoleWindow() == IntPtr.Zero) return;
+            FreeConsole();
         }
     }
 }

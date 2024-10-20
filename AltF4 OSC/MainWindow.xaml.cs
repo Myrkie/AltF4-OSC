@@ -68,7 +68,7 @@ namespace AltF4_OSC
 
         private void ConsoleButton_Click(object sender, RoutedEventArgs e)
         {
-            ConsoleManager.InitializeConsole();
+            ConsoleManager.ToggleConsole();
         }
 
         private void ClearBox(object sender, RoutedEventArgs e)

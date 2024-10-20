@@ -16,7 +16,7 @@
         <CheckBox Grid.Row="0" Grid.Column="0" Name="EnableCheckBox" Content="Enable AltF4" VerticalAlignment="Top" Margin="0,0,0,10"/>
         <CheckBox Grid.Row="0" Grid.Column="1" Name="AutoScroll" Content="Enable Auto Scroll" VerticalAlignment="Top" Margin="0,0,0,10"/>
         
-        <Button Grid.Row="1" Grid.Column="0" Content="Initialize Console" HorizontalAlignment="Left" Click="ConsoleButton_Click"/>
+        <Button Grid.Row="1" Grid.Column="0" Content="Toggle Console" HorizontalAlignment="Left" Click="ConsoleButton_Click"/>
 
         <Button Grid.Row="1" Grid.Column="1" Content="Clear Log" HorizontalAlignment="Right" Click="ClearBox"/>
 
