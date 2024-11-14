@@ -15,7 +15,7 @@ You must have basic understanding of unity animators if you plan to use this.
 
 2. **Timeout Logic**: Once the boolean is detected as `true`, VRChat will close after 800 milliseconds if "Enable Alt+F4" is checked. reset the boolean back to `false` in your animator after it has been set to `true` to avoid unintended behavior.
 
-3. **OSCQuery**: This application utilizes OSCQuery this can be overwritten in required in the config.
+3. **OSCQuery**: This application utilizes OSCQuery this can be overwritten in the config.
 
 ## Resources Used
 - [OSCQuery library](https://github.com/Natsumi-sama/OscQueryLibrary)
